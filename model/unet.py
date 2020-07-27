@@ -53,5 +53,5 @@ def UNet(inputs,is_training,min_filter=6):
     merge1=tf.concat([conv1,up1],3)
     conv1_1=conv_block(merge1,stage='stage_11',nb_filter=nb_filter[0],is_training=is_training)
     
-    output=slim.conv2d(sonv1_1,1,1,rate=1,activation_fn=tf.nn.sigmoid,scope='output')
+    output=slim.conv2d(conv1_1,1,1,rate=1,activation_fn=tf.nn.sigmoid,scope='output')
     return output   
