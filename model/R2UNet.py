@@ -11,12 +11,27 @@ def conv_block(inputs,stage,nb_filter,is_training,kernel_size=3):
     x=slim.conv2d(x,num_outputs=nb_filter,kernel_size=kernel_size,stride=1,rate=1,activation_fn=None)
     x=slim.batch_norm(x,is_training=is_training)
     x=tf.nn.leaky_relu(x)
+    weight = x.get_shape()[1].value
+    height = x.get_shape()[2].value
+
+    try:
+        out = tf.image.resize_nearest_neighbor(x, size=(weight*scale, height*scale))
+    except:
+        out = tf.image.resize_images(x, size=[weight*scale, height*scale])
+    return out
 def upsample(x,nb_filter,is_training):
-    _,_,_,C=x.get_shape().as_list()
-    x=slim.conv2d_transpose(x,C,2,2)
-    x=slim.conv2d(x,num_outputs=nb_filter,kernel_size=3,stride=1,rate=1,activation_fn=None)
-    x=slim.batch_norm(x,is_training=is_training)
-    x=tf.nn.leaky_relu(x)
+    is_deconv=False
+    if is_deconv:
+        _,_,_,C=x.get_shape().as_list()
+        x=slim.conv2d_transpose(x,C,2,2)
+        #x=slim.conv2d(x,num_outputs=nb_filter,kernel_size=3,stride=1,rate=1,activation_fn=None)
+        x=slim.batch_norm(x,is_training=is_training)
+        x=tf.nn.leaky_relu(x)
+    else:
+        x=img_scale(x,2)
+        x=slim.conv2d(x,num_outputs=nb_filter,kernel_size=3,stride=1,rate=1,activation_fn=None)
+        x=slim.batch_norm(x,is_training=is_training)
+        x=tf.nn.leaky_relu(x)        
     return x
 def Recurrent_block(input,nb_filter,is_training,t=2):
     for i in range(t):
