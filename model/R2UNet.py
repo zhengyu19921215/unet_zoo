@@ -14,6 +14,10 @@ def conv_block(inputs,stage,nb_filter,is_training,kernel_size=3):
     weight = x.get_shape()[1].value
     height = x.get_shape()[2].value
 
+def img_scale(x, scale):
+    weight = x.get_shape()[1].value
+    height = x.get_shape()[2].value
+
     try:
         out = tf.image.resize_nearest_neighbor(x, size=(weight*scale, height*scale))
     except:
