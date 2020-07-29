@@ -35,6 +35,7 @@ def SEResidualBlock(x,nb_filter,stage,reduction,is_training):
     return out
 
 
+def img_scale(x, scale):
     weight = x.get_shape()[1].value
     height = x.get_shape()[2].value
 
