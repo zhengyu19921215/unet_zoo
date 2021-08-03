@@ -23,8 +23,8 @@ def parse_function(filenames,img_shape,mask_shape,is_training):
     
     if is_training:
       img,mask=random_augmenattion(image,mask)
-    image=tf.ccast(image,tf.float32)
-    mask=tf.ccast(mask,tf.float32) 
+    image=tf.cast(image,tf.float32)
+    mask=tf.cast(mask,tf.float32) 
     return image,mask
 def make_batch_iterator(tfrecord_path,img_shape,mask_shape,nums,is_training=True,batch_size=16):
     def _parse_fn(tfrecord):
